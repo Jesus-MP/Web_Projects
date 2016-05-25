@@ -1,0 +1,472 @@
+<!--                      
+Jesus Moran Perez
+Lab2
+Calculator
+
+
+
+
+
+
+-->
+
+<!DOCTYPE html>
+
+
+	<html>
+		<head>
+		<meta charset="utf-8">
+		<title>Lab2</title>
+		<style type="text/css">
+		
+      
+       h1{
+		  color:purple;
+		  }
+
+       p{
+		color:blue;
+		}
+
+
+		
+		</style>
+		<script language="javascript" type="text/javascript">
+		
+		//needed for store multiple key presses for numbers bigger than 1s place
+		var number_storer=[];
+		//stores the value
+		var value;
+		//hours worked span
+		var hours_worked;
+		
+		//student id error span
+		var studentid_error;
+		
+		//first name error span
+		var firstname_error;
+		
+		//last name error span
+		var lastname_error;
+		
+		//biography error span
+		var biography_error;
+		
+		
+		
+		//save button
+		var save_button;
+		//submit button
+		var submit_button;
+		
+		//number value
+		var number;
+		var zero_button;
+		
+		function set_hours()
+		{
+		//sets the html to the value in the display
+		var hours_ok=document.getElementById("Display").value;
+		hours_worked.style.color="blue";
+		if(hours_ok=="")
+		{
+		hours_worked.style.color="red";
+		hours_worked.innerHTML="Not a valid number of hours worked"
+		
+		}
+		else
+		
+		hours_worked.innerHTML=document.getElementById("Display").value;
+		}
+		
+		//check the text box has numbers
+		function student_id_check(textfield)
+		{
+		
+		if(textfield.value.search(/^([0-9\.]+)$/)==-1)
+		{
+		return false;
+		}
+		else 
+		return true;
+		}
+		
+		//function to check firstname
+		function firstname_checker(textfield)
+		{
+		var f=textfield.value;
+		var regex = /^[A-Za-z]+$/;
+		
+		if(textfield.value=="")
+		{
+		
+		return false;
+		}
+		
+		//Checks that the field contains only numbers
+		if(!regex.test(f))
+		{
+		return false;
+		}
+		
+		//checks if the first letter is upper case
+	    if(f[0]==f[0].toUpperCase())
+		{
+		return true;
+		}
+		}
+		
+		//function to check if biography only has 25 words
+		function checkbiography(textfield)
+		{
+		
+		var textarea=textfield.value;
+				// enters the number of words into count var
+				var count = textarea.split(' ').length;
+				// if the num of words is more than 25, return false
+				if(count >= 25)
+				    {
+					return false;
+					}
+					else
+					{
+				// otherwise, return true
+				return true;
+		            }
+		
+		}
+		
+		//function to check lastname
+		function lastname_checker(textfield)
+		{
+		var f=textfield.value;
+		var regex = /^[A-Za-z]+$/;
+		
+		if(textfield.value=="")
+		{
+		
+		return false;
+		}
+		
+		//Checks that the field contains only numbers
+		if(!regex.test(f))
+		{
+		return false;
+		}
+		
+		//checks if the first letter is upper case
+	    if(f[0]==f[0].toUpperCase())
+		{
+		return true;
+		}
+		}
+		
+		//submit handler
+		function submit_handler(e)
+		{
+	    //initialize the info
+		
+		//first name
+		var firstname=document.getElementById("firstname").value;
+		var firstname_object=document.getElementById("firstname");
+		
+		var lastname=document.getElementById("lastname").value;
+		var lastname_object=document.getElementById("lastname");
+		
+		//biography
+		var biography=document.getElementById("biography").value;
+		var biography_object=document.getElementById("biography");
+		
+		var lastname=document.getElementById("lastname").value;
+		var lastname_object=document.getElementById("lastname");
+		
+		//studentid
+		var studentid=document.getElementById("studentid").value;
+		var studentid_object=document.getElementById("studentid");
+		
+		//hours worked
+		var hours=document.getElementById("hours").innerHTML;
+		
+		
+		
+		if(firstname_checker(firstname_object) && lastname_checker(lastname_object)&& checkbiography(biography_object) && student_id_check(studentid_object))
+		{
+		//prevents the page from submitting
+		e.preventDefault();
+		//clear the fields
+		studentid_object.style.backgroundColor="white";
+		studentid_error.innerHTML="";
+		firstname_object.style.backgroundColor="white";
+		firstname_error.innerHTML="";
+		lastname_object.style.backgroundColor="white";
+		lastname_error.innerHTML="";
+		biography_object.style.backgroundColor="white";
+		biography_error.innerHTML="";
+	
+		
+		alert("User Information:"+"\n\n"+
+		
+				"Firstname: "+firstname+"\n"
+		    +  "Lastname:" +lastname+"\n"
+			+  "StudentId:"+studentid+"\n"
+			+  "Biography:"+biography+"\n"
+		    + "HoursWorked"+hours+ "\n"
+		
+		
+		
+		);
+		
+		}
+		
+		
+		
+		
+		
+		
+		else{
+		
+		if(!checkbiography(biography_object))//works
+		{
+		e.preventDefault();
+		biography_object.style.backgroundColor="red";
+		biography_error.style.color="red";
+		biography_error.innerHTML="Error you entered way too many words";
+		var div=document.getElementById("MainDiv");
+		div.style.backgroundColor="lightblue";
+		}
+		
+		
+			
+		if(!lastname_checker(lastname_object))//works
+		{
+		e.preventDefault();
+		lastname_object.style.backgroundColor="red";
+		lastname_error.style.color="red";
+		lastname_error.innerHTML="Error enter a valid lasat name with first letter capitalized"
+		var div=document.getElementById("MainDiv");
+		div.style.backgroundColor="lightblue";
+		}
+		
+		
+		if(!firstname_checker(firstname_object))//works
+		{
+		e.preventDefault();
+		firstname_object.style.backgroundColor="red";
+		firstname_error.style.color="red";
+		firstname_error.innerHTML="Error enter a valid first name with first letter capitalized"
+		var div=document.getElementById("MainDiv");
+		div.style.backgroundColor="lightblue";
+		}
+		
+		if(!lastname_checker(lastname_object))//works
+		{
+		e.preventDefault();
+		lastname_object.style.backgroundColor="red";
+		lastname_error.style.color="red";
+		lastname_error.innerHTML="Error enter a valid lasat name with first letter capitalized"
+		var div=document.getElementById("MainDiv");
+		div.style.backgroundColor="lightblue";
+		}
+		
+		
+		if(!student_id_check(studentid_object))//works
+		{
+		e.preventDefault();
+		studentid_object.style.backgroundColor="red";
+		studentid_error.style.color="red";
+		studentid_error.innerHTML="Error enter a valid 9 digit number"
+		var div=document.getElementById("MainDiv");
+		div.style.backgroundColor="lightblue";
+		}
+		}
+		
+			
+		}
+		
+		//intializes the DOM elements and listeners
+		function init()
+		{
+		submit_button=document.getElementById("submit_button");
+		save_button=document.getElementById("save_button");
+		hours_worked=document.getElementById("hours");
+		studentid_error=document.getElementById("studentiderror");
+		firstname_error=document.getElementById("firstnameerror");
+		lastname_error=document.getElementById("lastnameerror");
+		biography_error=document.getElementById("biographyerror");
+		save_button.addEventListener("click",set_hours,false);
+	
+		
+		
+		//intializes the form and submit
+		
+		submit_button.addEventListener("click",submit_handler,false);
+		
+		
+		}
+		
+		//performs the << operation
+		function leftshift()
+		{
+		var x=document.getElementById("Display").value;
+		var y=x<<1;
+		if(y==0)
+		{
+		document.getElementById("Display").value="";
+		}
+		else
+		{
+		document.getElementById("Display").value=x<<1;
+		}
+		
+		}
+		
+		//performs the >> operation
+		function rightshift()
+		{
+		var x=document.getElementById("Display").value;
+		var y=x>>1;
+		if(y==0)
+		{
+		document.getElementById("Display").value="";
+		}
+		else
+		{
+		document.getElementById("Display").value=x>>1;
+		}
+		
+		}
+		
+		
+		
+		
+		
+		
+		
+
+		
+		//function to get input from button clicks
+		function ButtonPress(numbers)
+		{
+		number=numbers;
+		 
+ if(number=="leftshift" || number=="rightshift")	
+ {
+  
+   if(number=="leftshift")
+   {
+    leftshift();
+   }
+   else
+   {
+     rightshift();
+   }
+   
+ }
+		
+		
+  else if(number=="C")
+  {
+  
+  document.getElementById("Display").value="";
+  //clears the number storage array
+  number_storer=[];
+  hours_worked.innerHTML="";
+  }
+  else
+  {
+//adds the number to the number storage array
+  number_storer.push(number);
+  //removes the and joins the elements
+  var no_comma=number_storer.join("");
+  document.getElementById("Display").value =no_comma;
+  
+  }
+  
+		}
+		
+		window.addEventListener("load",init,false);
+		
+		</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</head>
+		
+		<body>
+		<div id="MainDiv">
+		
+		<h1 >Calculator</h1><br><br>
+		
+		
+		<form id="theform" action="#">
+
+		
+		First name
+		<input type="text" name="First" id="firstname" value="">
+		<br><br>
+		<span>
+			 <p class="hours" id="firstnameerror"></p>
+		</span>
+		Last name:
+		<input type="text" name="Last" id="lastname" value="">
+		<br><br>
+		<span>
+			 <p class="hours" id="lastnameerror"></p>
+		</span>
+		Student id:
+		<input type="text" name="StudentID" id="studentid" size="10" maxlength="10">
+		<br><br>
+		<span>
+			 <p class="hours" id="studentiderror"></p>
+		</span>
+		Biography:<br>
+		<textarea name="Biography" rows="5" id="biography" >
+		</textarea><br>
+		<span>
+			 <p class="hours" id="biographyerror"></p>
+		</span>
+		
+		
+		<input type="text" name="CalculatorDisplay" id="Display" value="" size="12" maxlength="12" onKeyDown="return false">
+         <br>
+		<input type="button" name="zero" value="0"  id="zero" onClick="ButtonPress(this.value)">
+		<input type="button" name="one" value="1" 	id="one" onClick="ButtonPress(this.value)">
+		<input type="button" name="two" value="2" 	id="two" onClick="ButtonPress(this.value)">
+
+         <br>
+		<input type="button" name="three" value="3"	id="three" onClick="ButtonPress(this.value)">
+		<input type="button" name="four" value="4" 	id="four" onClick="ButtonPress(this.value)">
+		<input type="button" name="five" value="5"	id="five" onClick="ButtonPress(this.value)">
+		
+         <br>
+		<input type="button" name="six" value="6"	  id="six" onClick="ButtonPress(this.value)">
+		<input type="button" name="seven" value="7"   id="seven" onClick="ButtonPress(this.value)">
+		<input type="button" name="eight" value="8"	  id="eight" onClick="ButtonPress(this.value)">
+        <br>
+		<input type="button" name="clear" value="C"    id="Clear" onClick="ButtonPress(this.value)">
+		<input type="button" name="nine" value="9"     id="nine" onClick="ButtonPress(this.value)">
+		<input type="button" name="blank" value="C"     id="Clear" onClick="ButtonPress(this.value)">
+		<br>
+		<input type="button" name="rightshift" value=">>"    id="rightshift" onClick="ButtonPress(this.id)">
+		<input type="button" name="leftshift"  value="<<"    id="leftshift" onClick="ButtonPress(this.id)">               
+		<br><br>
+		
+		
+		<span>
+			Hours Worked This Week: <p class="hours" id="hours"></p>
+		</span>
+		
+		<input type="button" value="Save" id="save_button">
+		<input type="submit" value="Submit" id="submit_button">
+		</form>
+		</div>
+		</body>
+	
+		</html>

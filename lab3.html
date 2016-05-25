@@ -1,0 +1,327 @@
+<html>
+  <!-- Jesus Moran Perez
+  
+  Lab3
+  
+  -->
+  
+  
+  
+  
+  
+  
+  <head>
+    <title>CSUN QUIZ</title>
+    <style type="text/css">
+		h2   { text-align:center }
+		html { height: 100% }
+		body { height: 100%; margin: 0;color:white; padding: 0; background-color: #C0C0C0;outline-style:double;}
+		#map-canvas { width:100%; height: 800px;outline-style:double }
+		#quiz { width: 100%; height: 30px;text: padding-top: 10px; padding-bottom: 10px; text-align:center;outline-style:double; }
+		#result { width: 100%; padding-bottom: 15px; text-align:center; height:15px;}
+		#scored { width: 100px; height: 100px;outline-style:dashed; top: 0px; left: 0px; padding: 15px; border-style: groove; opacity: .0; text-align:center; position:absolute; background-color: #C0C0C0; display:none;}
+	</style>
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?sensor=false">
+	</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+	</script>
+	<script type="text/javascript">
+
+	var map;
+	var quiz;
+	var result;
+	var distance;
+	var question = 1;
+	var correct = 0;
+	var jacaranda;
+	var library;
+	var universityHall;
+	var sierraHall;
+	var chaparralHall;
+	//set coordinates for building outline
+	var jacarandaCoordinates = [
+		new google.maps.LatLng(34.241017, -118.529453), //bottom left
+		new google.maps.LatLng(34.241017, -118.527844), //bottom right
+		new google.maps.LatLng(34.242055, -118.527838), //top right
+		new google.maps.LatLng(34.242055, -118.529378), //top left
+		new google.maps.LatLng(34.241017, -118.529453)  //bottom left
+	  ];
+	var libraryCoordinates = [
+		new google.maps.LatLng(34.239802, -118.529989), //bottom left
+		new google.maps.LatLng(34.239802, -118.528648), //bottom right
+		new google.maps.LatLng(34.240366, -118.528659), //top right
+		new google.maps.LatLng(34.240366, -118.529995), //top left
+		new google.maps.LatLng(34.239802, -118.529989)  //bottom left
+	  ];
+	var universityCoordinates = [
+		new google.maps.LatLng(34.239337, -118.532291), //bottom left
+		new google.maps.LatLng(34.239337, -118.531926), //bottom right
+		new google.maps.LatLng(34.240157, -118.531926), //top right
+		new google.maps.LatLng(34.240157, -118.532291), //top left
+		new google.maps.LatLng(34.239337, -118.532291)  //bottom left
+	  ];
+	var sierraCoordinates = [
+		new google.maps.LatLng(34.238104, -118.531363), //bottom left
+		new google.maps.LatLng(34.238104, -118.530038), //bottom right
+		new google.maps.LatLng(34.238450, -118.530038), //top right
+		new google.maps.LatLng(34.238450, -118.531363), //top left
+		new google.maps.LatLng(34.238104, -118.531363)  //bottom left
+	  ];
+	var chaparralCoordinates = [
+		new google.maps.LatLng(34.237904, -118.527237), //bottom left
+		new google.maps.LatLng(34.237904, -118.526717), //bottom right
+		new google.maps.LatLng(34.238530, -118.526717), //top right
+		new google.maps.LatLng(34.238530, -118.527237), //top left
+		new google.maps.LatLng(34.237904, -118.527237)  //bottom left
+	  ];
+	
+	function doubleClicked(e)
+	{
+		var within = false;
+		//check if click is within the boundaries of the building coordinates
+		switch(question)
+		{
+			case 1:
+				within = withinLines(34.242055, 34.241017, 118.527838, 118.529453, e.latLng.lat(), e.latLng.lng());
+				break;
+			case 2:
+				within = withinLines(34.240366, 34.239802, 118.528659, 118.529995, e.latLng.lat(), e.latLng.lng());
+				break;
+			case 3:
+				within = withinLines(34.240157, 34.239337, 118.531926, 118.532291, e.latLng.lat(), e.latLng.lng());
+				break;
+			case 4:
+				within = withinLines(34.238450, 34.238104, 118.530038, 118.531363, e.latLng.lat(), e.latLng.lng());
+				break;
+			case 5:
+				within = withinLines(34.238530, 34.237904, 118.526717, 118.527237, e.latLng.lat(), e.latLng.lng());
+				break;
+			
+		}
+		
+		if(within) //question was answered correctly
+		{
+			correct++;
+			result.style.color = "green";
+			result.innerHTML = "Correct!";
+			//outline building with green
+			switch(question)
+			{
+				case 1:
+					jacaranda = new google.maps.Polyline({
+					path: jacarandaCoordinates,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+					});
+				  jacaranda.setMap(map);
+					break;
+				case 2:
+					library = new google.maps.Polyline({
+					path: libraryCoordinates,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  library.setMap(map);
+					break;
+				case 3:
+					universityHall = new google.maps.Polyline({
+					path: universityCoordinates,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  universityHall.setMap(map);
+					break;
+				case 4:
+					sierraHall = new google.maps.Polyline({
+					path: sierraCoordinates,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  sierraHall.setMap(map);
+					break;
+				case 5:
+					chaparralHall = new google.maps.Polyline({
+					path: chaparralCoordinates,
+					geodesic: true,
+					strokeColor: '#00FF00',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  chaparralHall.setMap(map);
+					break;
+			
+			}
+		}
+		else //question was answered wrong
+		{
+			result.style.color = "red";
+			result.innerHTML = "Incorrect";
+			//outline with red
+			switch(question)
+			{
+				case 1:
+					jacaranda = new google.maps.Polyline({
+					path: jacarandaCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+					});
+				  jacaranda.setMap(map);
+					break;
+				case 2:
+					library = new google.maps.Polyline({
+					path: libraryCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  library.setMap(map);
+					break;
+				case 3:
+					 universityHall = new google.maps.Polyline({
+					path: universityCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  universityHall.setMap(map);
+					break;
+				case 4:
+					 sierraHall = new google.maps.Polyline({
+					path: sierraCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  sierraHall.setMap(map);
+					break;
+				case 5:
+					 chaparralHall = new google.maps.Polyline({
+					path: chaparralCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				  });
+				  chaparralHall.setMap(map);
+					break;
+				
+			}
+		}
+		question++; //set next question
+		setTimeout(Quiz, 1000); //wait 2 seconds before continuing the quiz
+		e.preventDefault();
+	}
+	
+	function Quiz()
+	{
+		switch(question)
+		{
+			case 1:
+				quiz.innerHTML = "Which building is Jacaranda Hall?";
+				result.innerHTML = "";
+				break;
+			case 2:
+				quiz.innerHTML = "Which building is the library?";
+				result.innerHTML = "";
+				jacaranda.setMap(null);
+				break;
+			case 3:
+				quiz.innerHTML = "Which building is University Hall?";
+				result.innerHTML = "";
+				library.setMap(null);
+				break;
+			case 4:
+				quiz.innerHTML = "Which building is Sierra Hall?";
+				result.innerHTML = "";
+				universityHall.setMap(null);
+				break;
+			case 5:
+				quiz.innerHTML = "Which building is Chaparral Hall?";
+				result.innerHTML = "";
+				sierraHall.setMap(null);
+				break;
+			default:
+				quiz.innerHTML = "Quiz completed.";
+				result.innerHTML = "";
+				chaparralHall.setMap(null);
+				scored.innerHTML = "<br/><br/>You scored " + correct + " out of a possible 5 correct!";
+				mapDiv.style.zIndex = "-1";
+				scored.style.display = "block";
+				var top = ((parseInt($(window).height()) / 2) - (120 / 2)) +'px';
+				var left = ((parseInt($(window).width()) / 2) - (250 / 2)) +'px';
+				//animate to center of window
+				
+				$(scored).animate({
+				top: top,
+				left: left,
+				height:'+=50px',
+				width:'+=100px',
+				opacity:'+=1'
+				});
+				break;
+			
+		}
+	}
+	
+	function withinLines(right, left, top, bottom, lat, lon)
+	{
+		//make lon positive
+		lon = lon * -1;
+		//check boundaries
+		if(((lat < right) && (lat > left)) && ((lon > top) && (lon < bottom)))
+			return true;
+		else
+			return false;
+	}
+
+	function init()
+	{
+		mapDiv = document.getElementById("map-canvas");
+		quiz = document.getElementById("quiz");
+		result = document.getElementById("result");
+		scored = document.getElementById("scored");
+		var mapOptions = {
+			zoom: 17,
+			disableDefaultUI: true,
+			disableDoubleClickZoom: true,
+			scrollwheel: false,
+			panControl: false,
+			draggable: false,
+			center: new google.maps.LatLng(34.239469, -118.528790),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+		
+		map = new google.maps.Map(document.getElementById("map-canvas"), 
+									mapOptions);
+
+		google.maps.event.addListener(map, 'dblclick', doubleClicked);
+
+	  Quiz();
+	}
+    
+	window.addEventListener("load", init, false); 
+	</script>
+  </head>
+  
+  <body >
+  <br><h2>CSUN Quiz Time!</h2>
+  <div id="quiz"></div>
+  <div id="result"></div>
+  <div id="scored"></div>
+  <div id="map-canvas"></div>
+  </body>
+  </html>
